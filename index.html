@@ -75,8 +75,8 @@
  <div class="tilt">
   <img src="assets/map.jpg" width="1200" height="742" alt="Ramani ya Hifadhi ya Taifa ya Mikumi: barabara kuu ya Morogoro, mto, wanyama na Mikumi Wildlife Lodge" loading="lazy" decoding="async">
   <span class="mk hotel" style="left:69%;top:17%"><span class="flag">Mikumi Wildlife Lodge</span><span class="dot"></span></span>
-  <span class="mk sign" style="left:87%;top:38%"><span class="plq">Mikumi &#8599;</span></span>
-  <span class="mk sign" style="left:15%;top:66%"><span class="plq">&#8601; Morogoro</span></span>
+  <span class="mk sign" style="left:87%;top:38%"><span class="plq">Mikumi<svg class="ar-i" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 L12 4 M6 4 H12 V10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg></span></span>
+  <span class="mk sign" style="left:15%;top:66%"><span class="plq"><svg class="ar-i" viewBox="0 0 16 16" aria-hidden="true"><path d="M12 4 L4 12 M4 6 V12 H10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg>Morogoro</span></span>
  </div>
 </div><figcaption><span class="sw">Mikumi Wildlife Lodge, ndani ya Hifadhi ya Taifa ya Mikumi, Morogoro</span><span class="en">Mikumi Wildlife Lodge, inside Mikumi National Park, Morogoro</span></figcaption></figure>
   <a class="btn" href="https://maps.app.goo.gl/dsSbRvC9sXPFXfta7" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg><span class="sw">Fungua ramani</span><span class="en">Open the map</span><span class="sp"></span><svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M4 12h15M14 7l5 5-5 5"/></svg></a>
@@ -133,19 +133,15 @@
   <p class="lead"><span class="sw">Shuttle ni bure. Tunaomba uthibitishe kabla ya <b class="num">15 Novemba</b> ili tupange magari.</span><span class="en">The shuttle is free. Please confirm before <b class="num">15 November</b> so we can plan the vehicles.</span></p>
   <form class="fm" id="f-shuttle" novalidate>
    <label class="fl" for="sh-name"><span><span class="sw">Jina lako</span><span class="en">Your name</span></span><input id="sh-name" name="name" required maxlength="60" autocomplete="name"></label>
-   <label class="fl" for="sh-phone"><span><span class="sw">Namba ya WhatsApp</span><span class="en">WhatsApp number</span></span><input id="sh-phone" name="phone" type="tel" inputmode="tel" required maxlength="20" placeholder="07XX XXX XXX" autocomplete="tel"></label>
+   <label class="fl" for="sh-phone"><span><span class="sw">Namba ya simu (si lazima)</span><span class="en">Phone number (optional)</span></span><input id="sh-phone" name="phone" type="tel" inputmode="tel" maxlength="20" placeholder="07XX XXX XXX" autocomplete="tel"></label>
    <fieldset class="fl"><legend><span class="sw">Utapanda wapi?</span><span class="en">Where will you board?</span></legend>
     <div class="opts">
      <label><input type="radio" name="pickup" value="SGR Morogoro 7:45 AM" required><span class="o"><b class="num">7:45 AM</b><span class="sw">Stesheni ya SGR Morogoro</span><span class="en">Morogoro SGR station</span></span></label>
      <label><input type="radio" name="pickup" value="Morena Hotel 8:00 AM"><span class="o"><b class="num">8:00 AM</b>Morena Hotel</span></label>
      <label><input type="radio" name="pickup" value="Usafiri wangu"><span class="o"><b>&nbsp;</b><span class="sw">Nina usafiri wangu</span><span class="en">I have my own transport</span></span></label>
     </div></fieldset>
-   <div class="row2">
-    <fieldset class="fl" id="sh-count-f"><legend><span class="sw">Idadi ya watu</span><span class="en">Number of people</span></legend>
-     <div class="step"><button type="button" data-d="-1" aria-label="-">&minus;</button><output id="sh-count" class="num">1</output><button type="button" data-d="1" aria-label="+">+</button></div></fieldset>
     <fieldset class="fl" id="sh-ret-f"><legend><span class="sw">Shuttle ya kurudi 5:30 PM</span><span class="en">Return shuttle 5:30 PM</span></legend>
      <div class="opts two"><label><input type="radio" name="ret" value="Ndiyo" checked><span class="o"><span class="sw">Ndiyo</span><span class="en">Yes</span></span></label><label><input type="radio" name="ret" value="Hapana"><span class="o"><span class="sw">Hapana</span><span class="en">No</span></span></label></div></fieldset>
-   </div>
    <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
    <p class="err" role="alert" hidden></p>
    <button class="btn" type="submit"><span class="sw">Thibitisha</span><span class="en">Confirm</span><span class="sp"></span><svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M4 12h15M14 7l5 5-5 5"/></svg></button>
