@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="sw" class="locked" data-lang="sw">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cecilia &amp; Isaack · Mikumi · 29.11.2026</title>
+<meta name="description" content="Mwaliko umejificha chini ya glitter. Jumapili, 29 Novemba 2026, Mikumi Wildlife Lodge.">
+<meta name="theme-color" content="#030001">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mikumi.space/">
+<meta property="og:title" content="Cecilia &amp; Isaack · 29.11.2026">
+<meta property="og:description" content="Mwaliko umejificha chini ya glitter. Jumapili, 29 Novemba 2026, Mikumi Wildlife Lodge.">
+<meta property="og:image" content="https://mikumi.space/assets/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/icon.png">
+<link rel="apple-touch-icon" href="assets/icon.png">
+<link rel="preload" href="assets/fonts/allura.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/cormorant-400i.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/cormorant-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/stage.jpg" as="image">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<button id="music" class="off" hidden aria-label="Muziki"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/><path class="slash" d="M3 3l18 18"/></svg></button>
+
+<div id="intro">
+ <canvas id="glitter"></canvas><canvas id="fx"></canvas>
+ <div class="copy">
+  <div class="greet" id="greet" hidden></div>
+  <div class="hint">An invitation is hiding under the glitter</div>
+  <div class="mono">C<i>&amp;</i>I</div>
+  <div class="blow">Blow on the glitter</div>
+  <div class="sub" id="sub">or simply tap</div>
+  <div class="track"><span id="bar"></span></div>
+ </div>
+</div>
+
+<header id="stage">
+ <div class="frame" aria-hidden="true">
+  <img class="bg" src="assets/stage.jpg" alt="" decoding="async" fetchpriority="high">
+  <video class="bg vid" id="bgv" data-src="assets/stage.mp4" muted loop playsinline autoplay preload="none" disablepictureinpicture></video>
+  <canvas id="sparks"></canvas>
+ </div>
+ <div class="stage-copy" lang="en">
+  <div class="rv st f1 rv-k">Together with their families</div>
+  <h1 class="rv hw hw1 rv-n rv-n1">Cecilia</h1>
+  <div class="rv st f3 rv-amp">&amp;</div>
+  <h1 class="rv hw hw2 rv-n rv-n2">Isaack</h1>
+  <div class="rv st f5 rv-inv">invite you to celebrate their wedding</div>
+  <div class="rv st f6 rv-date">29 11 2026</div>
+  <div class="rv st f7 rv-venue">Mikumi Wildlife Lodge, Morogoro</div>
+  <div class="rv st f8 cue">Scroll<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
+ </div>
+ <div class="dim" id="stage-dim"></div>
+ <div class="curtains"><canvas id="curtain"></canvas><div class="slit"></div><div class="spot"></div></div>
+</header>
+
+<main>
+ <div class="seam" aria-hidden="true"><canvas id="seam-bg"></canvas><canvas id="seam-dust"></canvas>
+  <div class="hello" id="hello" hidden><span><span class="sw">Karibu sana</span><span class="en">A warm welcome</span></span><b id="hello-name"></b></div>
+ </div>
+ <section id="siku">
+  <div class="cdbig">
+   <div class="day"><b class="num" id="cd-d">0</b><span><span class="sw">siku zimebaki</span><span class="en">days to go</span></span></div>
+   <div class="side"><p class="eyebrow"><span class="sw">Jumapili</span><span class="en">Sunday</span></p><p class="date num">29.11.2026</p>
+    <p class="hms num"><span id="cd-h">00</span><i><span class="sw">saa</span><span class="en">hrs</span></i> <span id="cd-m">00</span><i><span class="sw">dak</span><span class="en">min</span></i> <span id="cd-s">00</span><i><span class="sw">sek</span><span class="en">sec</span></i></p></div>
+  </div>
+  <p class="today" id="today" hidden><span class="sw">Leo ndiyo siku!</span><span class="en">Today is the day!</span></p>
+  <div class="facts"><div><span class="eyebrow"><span class="sw">Ibada</span><span class="en">Service</span></span><b class="num">11:00 AM</b></div><div><span class="eyebrow"><span class="sw">Fika kabla ya</span><span class="en">Arrive by</span></span><b class="num">10:00 AM</b></div></div>
+ </section>
+ <section id="mahali">
+  <p class="eyebrow"><span class="sw">Mahali</span><span class="en">Venue</span></p>
+  <figure class="mapfig"><div class="mapart" id="mapart">
+ <div class="tilt">
+  <img src="assets/map.jpg" width="1200" height="742" alt="Ramani ya Hifadhi ya Taifa ya Mikumi: barabara kuu ya Morogoro, mto, wanyama na Mikumi Wildlife Lodge" loading="lazy" decoding="async">
+  <span class="mk hotel" style="left:69%;top:17%"><span class="flag">Mikumi Wildlife Lodge</span><span class="dot"></span></span>
+  <span class="mk sign" style="left:87%;top:38%"><span class="plq">Mikumi &#8599;</span></span>
+  <span class="mk sign" style="left:15%;top:66%"><span class="plq">&#8601; Morogoro</span></span>
+ </div>
+</div><figcaption><span class="sw">Mikumi Wildlife Lodge, ndani ya Hifadhi ya Taifa ya Mikumi, Morogoro</span><span class="en">Mikumi Wildlife Lodge, inside Mikumi National Park, Morogoro</span></figcaption></figure>
+  <a class="btn" href="https://maps.app.goo.gl/dsSbRvC9sXPFXfta7" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg><span class="sw">Fungua ramani</span><span class="en">Open the map</span><span class="sp"></span><svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M4 12h15M14 7l5 5-5 5"/></svg></a>
+ </section>
+ <section id="ratiba">
+  <h2 class="script"><span class="sw">Ratiba ya siku</span><span class="en">The day's programme</span></h2>
+  <ol class="tl"><li class=""><span class="t num">10:00<small>AM</small></span><span class="m"></span><span class="w"><b><span class="sw">Karibu</span><span class="en">Welcome</span></b><em><span class="sw">Vinywaji na vitafunio</span><span class="en">Drinks and bites</span></em></span></li><li class="k"><span class="t num">11:00<small>AM</small></span><span class="m"></span><span class="w"><b><span class="sw">Ibada ya ndoa</span><span class="en">Wedding service</span></b></span></li><li class=""><span class="t num">12:00<small>PM</small></span><span class="m"></span><span class="w"><b><span class="sw">Vinywaji na picha</span><span class="en">Drinks and photos</span></b><em><span class="sw">Picha za familia na msako wa picha</span><span class="en">Family photos and the photo hunt</span></em></span></li><li class="k"><span class="t num">12:45<small>PM</small></span><span class="m"></span><span class="w"><b><span class="sw">Utambulisho wa familia</span><span class="en">Family introductions</span></b><em><span class="sw">Kila familia kwa zamu</span><span class="en">Each family in turn</span></em></span></li><li class=""><span class="t num">1:00<small>PM</small></span><span class="m"></span><span class="w"><b><span class="sw">Chakula cha mchana</span><span class="en">Lunch</span></b></span></li><li class=""><span class="t num">2:00<small>PM</small></span><span class="m"></span><span class="w"><b><span class="sw">Hotuba na baraka</span><span class="en">Speeches and blessings</span></b><em><span class="sw">Mwakilishi mmoja kila familia</span><span class="en">One speaker from each family</span></em></span></li><li class=""><span class="t num">4:40<small>PM</small></span><span class="m"></span><span class="w"><b><span class="sw">Picha ya pamoja</span><span class="en">Group photo</span></b><em><span class="sw">Wageni wote na maharusi</span><span class="en">All guests with the couple</span></em></span></li><li class="k"><span class="t num">5:30<small>PM</small></span><span class="m"></span><span class="w"><b><span class="sw">Shuttle inaondoka</span><span class="en">Shuttle departs</span></b><em><span class="sw">Kamili. Magari hayatoki hifadhini baada ya 6:00 PM</span><span class="en">Sharp. Vehicles may not leave the park after 6:00 PM</span></em></span></li></ol>
+ </section>
+ <section id="safari">
+  <h2 class="script"><span class="sw">Jinsi ya kufika</span><span class="en">Getting there</span></h2>
+  <div class="tix">
+   <div class="tk tk-main">
+    <div class="tk-band"><span><span class="sw">Tiketi ya safari</span><span class="en">Travel pass</span></span><span class="num">C &amp; I · 29.11.2026</span></div>
+    <div class="tk-body">
+     <div class="tk-meta">
+      <div><small><span class="sw">Abiria</span><span class="en">Passenger</span></small><b id="tk-name"><span class="sw">Mgeni wetu</span><span class="en">Our guest</span></b></div>
+      <div class="r"><small><span class="sw">Daraja</span><span class="en">Class</span></small><b><span class="sw">Lolote</span><span class="en">Any</span></b></div>
+     </div>
+     <div class="tk-route">
+      <div><b>DAR</b><span>Dar es Salaam</span></div>
+      <div class="tk-line"><i></i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"><rect x="5" y="3" width="14" height="14"/><path d="M5 11h14M9 17l-3 4M15 17l3 4M8.5 14h.01M15.5 14h.01"/></svg><i></i><em>SGR</em></div>
+      <div class="r"><b>MOR</b><span>Morogoro</span></div>
+     </div>
+     <div class="tk-meta">
+      <div><small><span class="sw">Treni inaondoka</span><span class="en">Train departs</span></small><b class="num red">6:00 AM</b></div>
+      <div class="r"><small><span class="sw">Tarehe</span><span class="en">Date</span></small><b class="num red">29.11.2026</b></div>
+     </div>
+    </div>
+   </div>
+   <div class="tk tk-stub">
+    <p class="tk-l"><span class="sw">Shuttle ya bure hadi lodge</span><span class="en">Free shuttle to the lodge</span></p>
+    <ol class="tk-stops">
+     <li><span class="num">7:45 AM</span><span><span class="sw">Stesheni ya SGR Morogoro</span><span class="en">Morogoro SGR station</span></span></li>
+     <li><span class="num">8:00 AM</span><span>Morena Hotel</span></li>
+     <li class="end"><span class="num">10:00 AM</span><span><span class="sw">Kufika Mikumi Wildlife Lodge</span><span class="en">Arrive at Mikumi Wildlife Lodge</span></span></li>
+    </ol>
+    <div class="tk-code" aria-hidden="true"><span class="bars"></span><span class="num">MIKUMI · 29 11 2026</span></div>
+   </div>
+  </div>
+  <div class="tix back">
+   <div class="tk tk-ret">
+    <p class="tk-l"><span class="sw">Kurudi</span><span class="en">Going home</span></p>
+    <ol class="tk-stops">
+     <li><span class="num">5:30 PM</span><span><span class="sw">Shuttle kutoka lodge, kamili</span><span class="en">Shuttle leaves the lodge, sharp</span></span></li>
+     <li class="end"><span class="num">8:30 PM</span><span><span class="sw">Treni ya kurudi Dar es Salaam</span><span class="en">Train back to Dar es Salaam</span></span></li>
+    </ol>
+   </div>
+  </div>
+  <p class="note"><span class="sw">Kuingia hifadhini: <b class="num">TSh 6,000</b> kwa mtu, kwa control number.</span><span class="en">Park entry: <b class="num">TSh 6,000</b> per person, paid with a control number.</span></p>
+  <a class="btn" href="files/Mwongozo-wa-Safari.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h6"/></svg><span class="sw">Mwongozo kamili wa safari</span><span class="en">Full travel guide (Kiswahili)</span><span class="sp"></span><svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M4 12h15M14 7l5 5-5 5"/></svg></a>
+ </section>
+ <section id="shuttle" class="form-sec" data-deadline="2026-11-15T23:59:59+03:00">
+  <h2 class="script"><span class="sw">Thibitisha shuttle</span><span class="en">Confirm the shuttle</span></h2>
+  <p class="lead"><span class="sw">Shuttle ni bure. Tunaomba uthibitishe kabla ya <b class="num">15 Novemba</b> ili tupange magari.</span><span class="en">The shuttle is free. Please confirm before <b class="num">15 November</b> so we can plan the vehicles.</span></p>
+  <form class="fm" id="f-shuttle" novalidate>
+   <label class="fl" for="sh-name"><span><span class="sw">Jina lako</span><span class="en">Your name</span></span><input id="sh-name" name="name" required maxlength="60" autocomplete="name"></label>
+   <label class="fl" for="sh-phone"><span><span class="sw">Namba ya WhatsApp</span><span class="en">WhatsApp number</span></span><input id="sh-phone" name="phone" type="tel" inputmode="tel" required maxlength="20" placeholder="07XX XXX XXX" autocomplete="tel"></label>
+   <fieldset class="fl"><legend><span class="sw">Utapanda wapi?</span><span class="en">Where will you board?</span></legend>
+    <div class="opts">
+     <label><input type="radio" name="pickup" value="SGR Morogoro 7:45 AM" required><span class="o"><b class="num">7:45 AM</b><span class="sw">Stesheni ya SGR Morogoro</span><span class="en">Morogoro SGR station</span></span></label>
+     <label><input type="radio" name="pickup" value="Morena Hotel 8:00 AM"><span class="o"><b class="num">8:00 AM</b>Morena Hotel</span></label>
+     <label><input type="radio" name="pickup" value="Usafiri wangu"><span class="o"><b>&nbsp;</b><span class="sw">Nina usafiri wangu</span><span class="en">I have my own transport</span></span></label>
+    </div></fieldset>
+   <div class="row2">
+    <fieldset class="fl" id="sh-count-f"><legend><span class="sw">Idadi ya watu</span><span class="en">Number of people</span></legend>
+     <div class="step"><button type="button" data-d="-1" aria-label="-">&minus;</button><output id="sh-count" class="num">1</output><button type="button" data-d="1" aria-label="+">+</button></div></fieldset>
+    <fieldset class="fl" id="sh-ret-f"><legend><span class="sw">Shuttle ya kurudi 5:30 PM</span><span class="en">Return shuttle 5:30 PM</span></legend>
+     <div class="opts two"><label><input type="radio" name="ret" value="Ndiyo" checked><span class="o"><span class="sw">Ndiyo</span><span class="en">Yes</span></span></label><label><input type="radio" name="ret" value="Hapana"><span class="o"><span class="sw">Hapana</span><span class="en">No</span></span></label></div></fieldset>
+   </div>
+   <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+   <p class="err" role="alert" hidden></p>
+   <button class="btn" type="submit"><span class="sw">Thibitisha</span><span class="en">Confirm</span><span class="sp"></span><svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M4 12h15M14 7l5 5-5 5"/></svg></button>
+  </form>
+  <div class="done" hidden><p class="script big"><span class="sw">Asante!</span><span class="en">Thank you!</span></p><p><span class="sw">Tumepokea uthibitisho wako wa shuttle.</span><span class="en">We have your shuttle confirmation.</span></p><p class="sum" id="sh-sum"></p><button type="button" class="link again"><span class="sw">Badilisha jibu</span><span class="en">Change my answer</span></button></div>
+  <p class="closed" hidden><span class="sw">Usajili wa shuttle umefungwa. Wasiliana nasi kwenye group.</span><span class="en">Shuttle sign-up has closed. Please message us in the group.</span></p>
+  <p class="locked-note" data-when="nokey"><span class="sw">Fomu hii iko kwenye link uliyotumiwa binafsi.</span><span class="en">This form is in the personal link sent to you.</span></p>
+ </section>
+ <section id="mavazi">
+  <h2 class="script"><span class="sw">Mavazi</span><span class="en">Dress code</span></h2>
+  <div class="dress">
+   <div class="dz"><div class="ill"><svg class="ill-g" aria-hidden="true" viewBox="0 0 80 150" stroke-linejoin="round"><path d="M30 30 Q26 42 24.2 54 Q23.2 62 22.2 68" stroke="#B39461" stroke-width=".9" fill="none"/><path d="M50 30 Q54 42 55.8 54 Q56.8 62 57.8 68" stroke="#B39461" stroke-width=".9" fill="none"/><path d="M26.5 26 L53.5 26 L52 31.5 L49.5 32 Q48.5 41 46.5 48 Q55 58 53.5 70 Q51 86 48 102 Q57 122 74 146 L6 146 Q23 122 32 102 Q29 86 26.5 70 Q25 58 33.5 48 Q31.5 41 30.5 32 L28 31.5 Z" fill="#6D0F24"/><path d="M26.5 26 L53.5 26" stroke="#B39461" stroke-width="1"/><path d="M32 102 Q40 105 48 102" stroke="#B39461" stroke-width="1.1" fill="none"/><path d="M38 106 L28 145 M42 106 L52 145 M40 107 L40 145" stroke="#000" stroke-opacity=".2" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M35 60 Q34 80 36 100" stroke="#FFFFFF" stroke-opacity=".28" stroke-width="1.1" fill="none" stroke-linecap="round"/><ellipse cx="40" cy="12" rx="4.3" ry="5.4" fill="none" stroke="#B39461" stroke-width="1"/><path d="M36 9.5 Q40 3.5 44.5 9 Q45.5 6 43 4.6 Q39 3 36.6 6.2" fill="#B39461" fill-opacity=".85" stroke="none"/><path d="M38.4 17.2 L38.6 22 M41.6 17.2 L41.4 22" stroke="#B39461" stroke-width=".9"/></svg></div><div class="dt"><b><span class="sw">Wanawake</span><span class="en">Women</span></b><span><span class="sw">Gauni la nyekundu au maroon</span><span class="en">A red or maroon gown</span></span></div></div>
+   <div class="dz"><div class="ill"><svg class="ill-t" aria-hidden="true" viewBox="0 0 80 74" fill="none" stroke-linejoin="round"><path d="M20 14 L10 56 L16 58 L24 30 M60 14 L70 56 L64 58 L56 30" fill="#141414" stroke="#141414" stroke-width="1"/><path d="M20 14 L32 9 L40 14 L48 9 L60 14 L66 70 L14 70 Z" fill="#141414" stroke="#141414"/><path d="M32 9 L40 14 L48 9 L46 22 L40 42 L34 22 Z" fill="#fff" stroke="none"/><path d="M32 9 L29 26 L40 46 L34 22 Z M48 9 L51 26 L40 46 L46 22 Z" fill="#3A3A3A" stroke="none"/><path d="M40 16.5 L35.4 13.7 L35.4 19.3 Z M40 16.5 L44.6 13.7 L44.6 19.3 Z" fill="#141414" stroke="none"/><circle cx="40" cy="16.5" r="1.7" fill="#141414" stroke="none"/><circle cx="40" cy="54" r="1.4" fill="#B39461" stroke="none"/><path d="M37 26 v12 M43 26 v12" stroke="#ddd" stroke-width=".5"/></svg></div><div class="dt"><b><span class="sw">Wanaume</span><span class="en">Men</span></b><span><span class="sw">Suti au tuxedo nyeusi</span><span class="en">A black suit or tuxedo</span></span></div></div>
+  </div>
+  <div class="strip"><i style="background:#6D0F24"></i><i style="background:#722F37"></i><i style="background:#800000"></i><i style="background:#8B1E2B"></i><i style="background:#9B111E"></i><i style="background:#B0102A"></i><i style="background:#C8102E"></i><i style="background:#E0251B"></i><i class="blk" style="background:#111"></i></div>
+  <div class="strip-l"><span><span class="sw">Vivuli vya nyekundu · wanawake</span><span class="en">Shades of red · women</span></span><span><span class="sw">Nyeusi · wanaume</span><span class="en">Black · men</span></span></div>
+  <a class="btn" href="files/Mavazi-ya-Siku.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h6"/></svg><span class="sw">Mwongozo wa mavazi</span><span class="en">Dress code guide (Kiswahili)</span><span class="sp"></span><svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M4 12h15M14 7l5 5-5 5"/></svg></a>
+ </section>
+ <section id="ujumbe" class="form-sec" data-deadline="2026-11-20T23:59:59+03:00">
+  <h2 class="script"><span class="sw">Ujumbe kwa maharusi</span><span class="en">A note for the couple</span></h2>
+  <p class="lead"><span class="sw">Tuachie maneno machache kwa Cecilia na Isaack. Tutayabandika kwenye ubao siku ya harusi. Tuma kabla ya <b class="num">20 Novemba</b>.</span><span class="en">Leave a few words for Cecilia and Isaack. We will pin them on a board on the wedding day. Send before <b class="num">20 November</b>.</span></p>
+  <form class="fm" id="f-note" novalidate>
+   <div class="card-note"><span class="pin"></span>
+    <label class="sr" for="nt-msg"><span class="sw">Ujumbe wako</span><span class="en">Your note</span></label>
+    <textarea id="nt-msg" name="msg" required maxlength="300" rows="6"></textarea>
+    <div class="sig"><label for="nt-name">&mdash;</label><input id="nt-name" name="name" required maxlength="60" placeholder="Jina"></div>
+    <span class="cnt num" id="nt-cnt">0 / 300</span>
+   </div>
+   <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+   <p class="err" role="alert" hidden></p>
+   <button class="btn" type="submit"><span class="sw">Tuma ujumbe</span><span class="en">Send note</span><span class="sp"></span><svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M4 12h15M14 7l5 5-5 5"/></svg></button>
+  </form>
+  <div class="done" hidden><p class="script big"><span class="sw">Asante!</span><span class="en">Thank you!</span></p><p><span class="sw">Ujumbe wako utakuwa kwenye ubao siku ya harusi.</span><span class="en">Your note will be on the board on the wedding day.</span></p><blockquote class="sum" id="nt-sum"></blockquote><button type="button" class="link again"><span class="sw">Badilisha ujumbe</span><span class="en">Edit my note</span></button></div>
+  <p class="closed" hidden><span class="sw">Muda wa kutuma jumbe umeisha. Asante sana!</span><span class="en">Notes have closed. Thank you so much!</span></p>
+  <p class="locked-note" data-when="nokey"><span class="sw">Fomu hii iko kwenye link uliyotumiwa binafsi.</span><span class="en">This form is in the personal link sent to you.</span></p>
+ </section>
+ <section id="thibitisha">
+  <h2 class="script"><span class="sw">Tujiandae pamoja</span><span class="en">Let's get ready together</span></h2>
+  <p class="lead"><span class="sw"><span class="rsvp-name"></span><span class="rsvp-ask">Tunaomba</span> ujiunge na group la wageni. Hapo utapata taarifa na matangazo yote ya safari.</span><span class="en"><span class="rsvp-name"></span><span class="rsvp-ask">We kindly ask you</span> to join the guest group. There you will get all the travel news and updates.</span></p>
+  <a class="btn" id="group-btn" href="#" target="_blank" rel="noopener" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.6-5.1A8.5 8.5 0 1 1 21 11.5z"/></svg><span class="sw">Jiunge na group la WhatsApp</span><span class="en">Join the WhatsApp group</span><span class="sp"></span><svg class="ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M4 12h15M14 7l5 5-5 5"/></svg></a>
+  <p class="group-note" id="group-note"><span class="sw">Kitufe cha kujiunga na group kipo kwenye link uliyotumiwa binafsi.</span><span class="en">The button to join the group is in the personal link sent to you.</span></p>
+ </section>
+ <footer>
+  <div class="script">Cecilia &amp; Isaack</div>
+  <div class="fd num">29 · 11 · 2026</div>
+ </footer>
+</main>
+<div id="lang" role="group" aria-label="Language"><button type="button" data-l="sw">SW</button><button type="button" data-l="en">EN</button></div>
+<script>window.MIKUMI_SECRET = {"i": {"iv": "jimHjhuLRN7bU0Kj", "ct": "Yj0_kAIUrAuWtjMI47YMaocT8DqMBQIPY-AID46AcvPPiB3W-tR_-MzO8L_w9qP3lq3x5ApfvxhkljCWA_AwtQ"}, "c": {"iv": "AokiMhLDZ4IWQviF", "ct": "Kn_j5krgKIaHkFuQXq99bJtQUVZGAOMkXQ66d4W5l7moRmdt0ZTypiZJG2nAaZBZPnP44URz1CpJzJdupxBXYg"}}; window.MIKUMI_FORM = "https://script.google.com/macros/s/AKfycbxxmHx_UDxsrRPdXX_lK1hnNVi4f4YuUG5mqpouoaIDBYv7Q882RvaVZ6nA3xaYThV1AQ/exec";</script>
+<script src="assets/app.js" defer></script>
+</body>
+</html>
