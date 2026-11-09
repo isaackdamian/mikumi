@@ -10,10 +10,13 @@
   const guest = (params.get('n') || '').trim().slice(0, 40);
   const key = params.get('k') || '';
   const fam = params.get('f') === 'c' ? 'c' : 'i';                 // c = Cecilia's family, i = Isaack's family
+  // short form for greetings: first name, but keep a title with it ("Mama Neema", "Dr. Juma")
+  const TITLES = /^(mama|baba|bi\.?|bw\.?|bwana|dr\.?|prof\.?|mzee|bibi|babu|shangazi|mjomba|anko|ankal|uncle|aunt|aunty|auntie|dada|kaka|mr\.?|mrs\.?|ms\.?|miss|pastor|mch\.?|mchungaji|rev\.?|fr\.?|padre|sister|sr\.?|eng\.?|hon\.?|mhe\.?|mheshimiwa)$/i;
+  const short = (() => { const w = guest.split(/\s+/); return w.length > 1 && TITLES.test(w[0]) ? w[0] + ' ' + w[1] : w[0] || ''; })();
   if (guest) {
-    $('#greet').textContent = 'Dear ' + guest;
+    $('#greet').textContent = 'Dear ' + short;
     $('#greet').hidden = false;
-    document.querySelectorAll('.rsvp-name').forEach((e) => { e.textContent = guest + ', '; });
+    document.querySelectorAll('.rsvp-name').forEach((e) => { e.textContent = short + ', '; });
     $('#hello-name').textContent = guest; $('#hello').hidden = false;
     document.querySelectorAll('#tk-name').forEach((e) => { e.textContent = guest; });
     document.querySelectorAll('.sw .rsvp-ask').forEach((e) => { e.textContent = 'tunaomba'; });
