@@ -4,6 +4,10 @@
   const html = document.documentElement;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const SECRET = window.MIKUMI_SECRET || {};
+  // iPhone reloads pages left in the background and puts back the old scroll position; the invitation must start at the top
+  try { history.scrollRestoration = 'manual'; } catch (e) {}
+  const toTop = () => { window.scrollTo(0, 0); document.documentElement.scrollTop = 0; document.body.scrollTop = 0; };
+  toTop(); window.addEventListener('load', toTop);
 
   /* ---------- personal link: #n=Name&k=key ---------- */
   const params = new URLSearchParams(location.hash.slice(1));
@@ -59,15 +63,16 @@
   const LOOP = { start: 0.5, end: 15.92 };                         // the file carries one extra second so this window repeats seamlessly
   const ACtx = window.AudioContext || window.webkitAudioContext;
   let actx = null, gain = null, mState = 'idle';                    // idle -> loading -> on / off
-  const musicBytes = fetch('assets/muziki.mp3').then((r) => (r.ok ? r.arrayBuffer() : null)).catch(() => null);
+  const getBytes = () => fetch('assets/muziki.mp3', { cache: 'force-cache' }).then((r) => (r.ok ? r.arrayBuffer() : null)).catch(() => null);
+  let musicBytes = getBytes();
   function decode(ab) { return new Promise((res, rej) => { const p = actx.decodeAudioData(ab, res, rej); if (p && p.then) p.then(res, rej); }); }
   function startMusic() {
     if (mState !== 'idle' || !ACtx) return;
     mState = 'loading';
     try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}   // iPhone: play even with the silent switch on
     actx = new ACtx(); actx.resume();
-    musicBytes.then((ab) => {
-      if (!ab) { mState = 'none'; return null; }
+    musicBytes.then((ab) => ab || (musicBytes = getBytes())).then((ab) => {
+      if (!ab) { mState = 'idle'; musicBytes = getBytes(); try { actx.close(); } catch (e) {} actx = null; return null; }
       return decode(ab.slice(0));
     }).then((buf) => {
       if (!buf) return;
@@ -82,14 +87,14 @@
         }
       };
       mState = 'on'; musicBtn.hidden = false; musicBtn.classList.remove('off');
-    }).catch(() => { mState = 'none'; });
+    }).catch(() => { mState = 'idle'; try { actx.close(); } catch (e) {} actx = null; });
   }
   // if the glitter was blown away (no tap), the first touch anywhere starts the music
   // iPhone only lets sound start on a finished touch (touchend / click), not on pointerdown,
   // so every kind of touch either starts the music or wakes a context that is still suspended
   function wakeMusic() {
     if (mState === 'idle') startMusic();
-    if (actx && actx.state !== 'running' && (mState === 'loading' || mState === 'on')) actx.resume();
+    if (actx && actx.state !== 'running' && (mState === 'loading' || mState === 'on')) actx.resume().catch(() => {});
   }
   ['pointerdown', 'pointerup', 'touchend', 'click', 'keydown'].forEach((ev) => document.addEventListener(ev, wakeMusic, { capture: true, passive: true }));
   musicBtn.addEventListener('click', (e) => {
@@ -110,7 +115,14 @@
     if (mState !== 'on' || !gain) return;
     const t = actx.currentTime; gain.gain.cancelScheduledValues(t); gain.gain.setTargetAtTime(level(), t, 0.25);
   }, { passive: true });
-  document.addEventListener('visibilitychange', () => { if (!actx || mState !== 'on') return; if (document.hidden) actx.suspend(); else actx.resume(); });
+  document.addEventListener('visibilitychange', () => {
+    const v = $('#bgv');
+    if (v && v.src) { if (document.hidden) v.pause(); else if (stage.style.visibility !== 'hidden') v.play().catch(() => {}); }
+    if (!actx || mState !== 'on') return;
+    if (document.hidden) actx.suspend(); else actx.resume().catch(() => {});
+  });
+  // coming back to a page kept in memory: wake the music and the video
+  window.addEventListener('pageshow', (e) => { if (!e.persisted) return; if (actx && mState === 'on') actx.resume().catch(() => {}); const v = $('#bgv'); if (v && v.src) v.play().catch(() => {}); });
 
   /* ---------- glitter: blown in from the left, blown away to the right ---------- */
   const intro = $('#intro');
@@ -420,7 +432,7 @@
   function endFall() {
     state = 'done';
     intro.classList.add('gone');
-    setTimeout(() => intro.remove(), 1000);
+    setTimeout(() => { intro.remove(); [cv, fx].forEach((c) => { c.width = c.height = 0; }); baseC = null; reflC = null; px = py = tx = ty = vx = vy = null; }, 1000);
   }
 
   /* ---------- stage sequence (timed from the tap) ---------- */
@@ -428,6 +440,7 @@
   const curtains = $('.curtains');
   const at = (sec, fn) => setTimeout(fn, reduce ? 0 : sec * 1000);
   function beginStageSequence() {
+    toTop();
     startSparks(); startResidue();
     at(1.2, () => { curtains.classList.add('lit'); drawCurtain(openP); });
     at(2.6, () => stage.classList.add('s1'));          // Together with their families
@@ -570,7 +583,7 @@
     const loop = (now) => {
       const t = (now - resT0) / 1000;
       if (!opening) drawCurtain(openP);
-      if (t < 8.4) requestAnimationFrame(loop); else { residue = null; if (!opening) drawCurtain(openP); }
+      if (t < 8.4) requestAnimationFrame(loop); else { residue = null; if (!opening) { drawCurtain(openP); if (openP >= 1) { tex = [null, null]; floorTex = null; } } }
     };
     requestAnimationFrame(loop);
   }
