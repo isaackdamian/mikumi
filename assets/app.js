@@ -76,11 +76,22 @@
       gain = actx.createGain();
       const t = actx.currentTime; gain.gain.setValueAtTime(0, t); gain.gain.linearRampToValueAtTime(level(), t + 3);
       src.connect(gain); gain.connect(actx.destination); src.start();
+      actx.onstatechange = () => {
+        if (actx.state === 'running' && mState === 'on') {
+          const t3 = actx.currentTime; gain.gain.cancelScheduledValues(t3); gain.gain.setValueAtTime(0, t3); gain.gain.linearRampToValueAtTime(level(), t3 + 2.5);
+        }
+      };
       mState = 'on'; musicBtn.hidden = false; musicBtn.classList.remove('off');
     }).catch(() => { mState = 'none'; });
   }
   // if the glitter was blown away (no tap), the first touch anywhere starts the music
-  document.addEventListener('pointerdown', () => { if (mState === 'idle') startMusic(); else if (actx && actx.state === 'suspended' && mState === 'on') actx.resume(); }, true);
+  // iPhone only lets sound start on a finished touch (touchend / click), not on pointerdown,
+  // so every kind of touch either starts the music or wakes a context that is still suspended
+  function wakeMusic() {
+    if (mState === 'idle') startMusic();
+    if (actx && actx.state !== 'running' && (mState === 'loading' || mState === 'on')) actx.resume();
+  }
+  ['pointerdown', 'pointerup', 'touchend', 'click', 'keydown'].forEach((ev) => document.addEventListener(ev, wakeMusic, { capture: true, passive: true }));
   musicBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     if (!actx || !gain) return;
