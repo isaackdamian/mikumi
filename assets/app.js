@@ -219,7 +219,8 @@
       tIn[i] = Math.random() * 0.55 + (p.x / W) * 0.15; dIn[i] = 0.85 + Math.random() * 0.65;
       px[i] = ox[i]; py[i] = oy[i];
       // blown away to the right: a front sweeps across from the left
-      tOut[i] = 0.08 + (p.x / W) * 1.7 + Math.random() * 0.75;
+      const dc = Math.hypot((p.x - W / 2) / W, (p.y - H * 0.48) / H) / 0.62;   // 0 at the centre, ~1 at the corners
+      tOut[i] = 0.04 + dc * 1.15 + Math.random() * 0.55;
       mode[i] = Math.random() < 0.84 ? 0 : 1;                          // 0 = blown, 1 = drops onto the stage
       oy[i] = 0.922 + Math.random() * 0.045;                            // where on the stage top it settles (reused after the entrance)
       const g = groups[groups.length - 1];
@@ -267,16 +268,17 @@
     ctx.globalAlpha = a; ctx.fillStyle = sh; ctx.fillRect(0, y0 - 4, W, 10);
     ctx.restore();
   }
-  function drawBase(a, frontX) {
+  function drawBase(a, frontX, open) {
     if (a <= 0) return;
     ctx.globalAlpha = a;
     ctx.drawImage(baseC, 0, 0, W, H);
     ctx.globalAlpha = 1;
-    if (frontX != null) {                                            // clear the background behind the wind front
+    if (open) {                                                      // a hole opens from the centre and spreads outwards
+      const R = Math.hypot(W, H) * 0.62 * Math.min(1.25, open), cx = W / 2, cy = H * 0.48;
       ctx.globalCompositeOperation = 'destination-out';
-      const g = ctx.createLinearGradient(frontX - W * 0.45, 0, frontX, 0);
-      g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = g; ctx.fillRect(0, 0, Math.max(0, frontX), H);
+      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(1, R));
+      g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(0.6, 'rgba(0,0,0,.9)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
       ctx.globalCompositeOperation = 'source-over';
     }
   }
@@ -338,8 +340,14 @@
     intro.classList.add('falling');
     fallT0 = performance.now(); lastT = fallT0;
     for (let i = 0; i < N; i++) {                                    // velocities for the gust
-      if (mode[i] === 0) { vx[i] = 90 + Math.random() * 330; vy[i] = -40 + Math.random() * 120; }
-      else { vx[i] = 15 + Math.random() * 60; vy[i] = Math.random() * 40; }
+      // a breath from the centre: everything is pushed outwards, mostly sideways and down, rarely up
+      let dx = px[i] - W / 2, dy = py[i] - H * 0.48;
+      const d = Math.hypot(dx, dy) || 1; dx /= d; dy /= d;
+      if (dy < 0) dy *= Math.random() < 0.18 ? 0.8 : 0.22;
+      dy += 0.35;
+      const sp = (mode[i] === 0 ? 160 : 40) + Math.random() * (mode[i] === 0 ? 420 : 90);
+      vx[i] = dx * sp * (0.85 + Math.random() * 0.3) + (Math.random() - 0.5) * 40;
+      vy[i] = dy * sp * (0.85 + Math.random() * 0.3);
     }
     if (reduce) { endFall(); return; }
     ensureCurtain();
@@ -386,8 +394,8 @@
       const floorY = H * 0.915;
       for (let i = 0; i < N; i++) {
         if (t < tOut[i] || landed[i]) continue;
-        if (mode[i] === 0) {                                          // gust: accelerate to the right, slight arc
-          vx[i] += 220 * dt; vy[i] += 140 * dt;
+        if (mode[i] === 0) {                                          // blown outwards, slowing in the air while gravity takes over
+          const drag = Math.exp(-0.9 * dt); vx[i] *= drag; vy[i] = vy[i] * drag + 260 * dt;
           px[i] += vx[i] * dt; py[i] += vy[i] * dt;
         } else {                                                      // falls onto the stage
           const fl = H * oy[i];
@@ -395,15 +403,14 @@
           if (py[i] >= fl) { py[i] = fl; landed[i] = 1; }
         }
       }
-      const frontX = (t / 2.1) * W * 1.35 - W * 0.12;
       ctx.clearRect(0, 0, W, H);
-      drawBase(1, frontX);
+      drawBase(1, null, Math.max(0, (t - 0.05) / 1.9));
       drawParticles((i) => {
         if (t < tOut[i]) return 1;
         const age = t - tOut[i];
         if (mode[i] === 1) return landed[i] ? 0.55 * Math.max(0, 1 - Math.max(0, t - 1.6) / 1.2) : Math.max(0, 1 - Math.max(0, age - 0.9) / 0.6);
-        if (px[i] > W + 8) return 0;
-        return Math.max(0, 1 - Math.max(0, age - 0.25) / 0.9);
+        if (px[i] < -8 || px[i] > W + 8 || py[i] > H + 8) return 0;
+        return Math.max(0, 1 - Math.max(0, age - 0.45) / 1.1);
       });
       drawReflection(Math.max(0, 1 - t / 1.4));
       if (t > 3.5) endFall();
@@ -553,17 +560,17 @@
     if (reduce || resOn) return; resOn = true;
     const r = rng(5150), n = 7500, pal = ['#9a1222', '#c01a2c', '#d8283c', '#ee4a58', '#ff7a84', '#ffffff', '#ffe9e9'];
     residue = Array.from({ length: n }, () => {
-      const x = Math.pow(r(), 0.75), y = r() * 0.9, white = r() < 0.1;   // denser towards the right, which clears last
+      const x = r(), y = r() * 0.9, white = r() < 0.12;
       const clump = 0.5 + 0.5 * Math.sin(x * 9 + y * 5) * Math.sin(x * 4 - y * 7);   // patchy clearing
       return { x, y, s: (white ? 0.9 + r() * 1.4 : 0.5 + r() * 1.2), c: white ? pal[5 + (r() * 2 | 0)] : pal[r() * 5 | 0],
-        tf: 1.0 + 3.0 * Math.pow(x, 1.2) * (0.55 + 0.45 * clump) + r() * 0.9 + (white ? 0.6 : 0), tw: r() * 6.28, white };
+        tf: 1.4 + 4.2 * Math.min(1, Math.hypot(x - 0.5, (y - 0.48) * 0.7) / 0.55) * (0.6 + 0.4 * clump) + r() * 1.4 + (white ? 0.8 : 0), tw: r() * 6.28, white };
     });
     residue.sort((a, b) => (a.c < b.c ? -1 : a.c > b.c ? 1 : 0));          // one fillStyle per colour
     resT0 = performance.now();
     const loop = (now) => {
       const t = (now - resT0) / 1000;
       if (!opening) drawCurtain(openP);
-      if (t < 6.2) requestAnimationFrame(loop); else { residue = null; if (!opening) drawCurtain(openP); }
+      if (t < 8.4) requestAnimationFrame(loop); else { residue = null; if (!opening) drawCurtain(openP); }
     };
     requestAnimationFrame(loop);
   }
@@ -648,7 +655,7 @@
   const IW = 1024, IH = 1536;
   const lineX = (y) => 2 + 0.586 * y;            // bright edge of the light beam in the photo
   const LINE_END = 790, STREAK_END = 980;
-  let dots = [], streaks = [], sparkOn = false, sparkVisible = true, k = 1, last = 0, lineA = 0;
+  let settle = [], settleT0 = 0, dots = [], streaks = [], sparkOn = false, sparkVisible = true, k = 1, last = 0, lineA = 0;
   const SDPR = Math.min(2, DPR);
   function sizeSparks() {
     const r = frameEl.getBoundingClientRect();
@@ -656,6 +663,12 @@
     k = r.width / IW;
     sctx.setTransform(SDPR * k, 0, 0, SDPR * k, 0, 0);
     dots = Array.from({ length: 120 }, () => newDot(true));
+    settle = Array.from({ length: 260 }, () => {                     // the last of the blown glitter, still drifting down
+      const white = Math.random() < 0.22;
+      return { x: 60 + Math.random() * 904, y: -250 - Math.random() * 2300, vy: 90 + Math.random() * 140, sw: Math.random() * 6.28,
+        r: white ? 1.4 + Math.random() * 2 : 1.6 + Math.random() * 2.8, c: white ? '255,250,248' : (Math.random() < 0.5 ? '214,40,60' : '160,18,34'), p: Math.random() * 6.28 };
+    });
+    settleT0 = performance.now();
     streaks = Array.from({ length: 120 }, () => newStreak(true));
   }
   function newDot(anywhere) {
@@ -714,6 +727,21 @@
       sctx.beginPath(); sctx.moveTo(s.x, s.y - s.len); sctx.lineTo(s.x, s.y); sctx.stroke();
     }
 
+    // leftover glitter settling for the first seconds after the curtains part
+    if (settle.length) {
+      const st = (now - settleT0) / 1000, fadeAll = Math.max(0, 1 - Math.max(0, st - 7) / 3);
+      sctx.globalCompositeOperation = 'source-over';
+      for (let i = settle.length - 1; i >= 0; i--) {
+        const s = settle[i];
+        s.vy = Math.max(38, s.vy * Math.exp(-0.25 * dt)); s.y += s.vy * dt; s.x += Math.sin(now / 900 + s.sw) * 14 * dt;
+        if (s.y > IH - 150 || fadeAll <= 0) { settle.splice(i, 1); continue; }
+        if (s.y < 0) continue;
+        const tw = 0.55 + 0.45 * Math.sin(now / 260 + s.p);
+        sctx.fillStyle = `rgba(${s.c},${(0.85 * tw * fadeAll).toFixed(3)})`;
+        sctx.fillRect(s.x, s.y, s.r, s.r * 1.6);
+      }
+      sctx.globalCompositeOperation = 'lighter';
+    }
     // drifting sparkles over the whole stage, a little brighter near the couple
     for (let i = 0; i < dots.length; i++) {
       const s = dots[i];
