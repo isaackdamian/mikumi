@@ -71,7 +71,7 @@
       const src = actx.createBufferSource();
       src.buffer = buf; src.loop = true; src.loopStart = LOOP.start; src.loopEnd = Math.min(LOOP.end, buf.duration);
       gain = actx.createGain();
-      const t = actx.currentTime; gain.gain.setValueAtTime(0, t); gain.gain.linearRampToValueAtTime(0.7, t + 3);
+      const t = actx.currentTime; gain.gain.setValueAtTime(0, t); gain.gain.linearRampToValueAtTime(level(), t + 3);
       src.connect(gain); gain.connect(actx.destination); src.start();
       mState = 'on'; musicBtn.hidden = false; musicBtn.classList.remove('off');
     }).catch(() => { mState = 'none'; });
@@ -86,10 +86,16 @@
       gain.gain.cancelScheduledValues(t); gain.gain.setValueAtTime(gain.gain.value, t); gain.gain.linearRampToValueAtTime(0, t + 0.6);
       setTimeout(() => actx.suspend(), 650); mState = 'off'; musicBtn.classList.add('off');
     } else if (mState === 'off') {
-      actx.resume().then(() => { const t2 = actx.currentTime; gain.gain.cancelScheduledValues(t2); gain.gain.setValueAtTime(0, t2); gain.gain.linearRampToValueAtTime(0.7, t2 + 1.2); });
+      actx.resume().then(() => { const t2 = actx.currentTime; gain.gain.cancelScheduledValues(t2); gain.gain.setValueAtTime(0, t2); gain.gain.linearRampToValueAtTime(Math.max(level(), 0.35), t2 + 1.2); });
       mState = 'on'; musicBtn.classList.remove('off');
     }
   });
+  // the music belongs to the stage: it fades out as the page covers the stage and returns when scrolling back up
+  function level() { const h = window.innerHeight, k = 1 - (window.scrollY - h * 0.25) / (h * 0.65); return 0.7 * Math.min(1, Math.max(0, k)); }
+  window.addEventListener('scroll', () => {
+    if (mState !== 'on' || !gain) return;
+    const t = actx.currentTime; gain.gain.cancelScheduledValues(t); gain.gain.setTargetAtTime(level(), t, 0.25);
+  }, { passive: true });
   document.addEventListener('visibilitychange', () => { if (!actx || mState !== 'on') return; if (document.hidden) actx.suspend(); else actx.resume(); });
 
   /* ---------- glitter: blown in from the left, blown away to the right ---------- */
@@ -875,15 +881,12 @@
       if (!key || !URL_) { show('nokey'); return; }
       const nameIn = form.querySelector('[name="name"]'); if (guest) nameIn.value = guest;
       // stepper and counters
-      const out = form.querySelector('#sh-count');
-      form.querySelectorAll('.step button').forEach((b) => b.addEventListener('click', () => {
-        out.value = out.textContent = Math.min(12, Math.max(1, (+out.textContent || 1) + +b.dataset.d));
-      }));
+
       const msg = form.querySelector('#nt-msg'), cnt = form.querySelector('#nt-cnt');
       if (msg) msg.addEventListener('input', () => { cnt.textContent = msg.value.length + ' / 300'; });
       const own = () => { const p = form.querySelector('[name="pickup"]:checked'); return p && p.value === 'Usafiri wangu'; };
       form.querySelectorAll('[name="pickup"]').forEach((r) => r.addEventListener('change', () => {
-        const o = own(); ['#sh-count-f', '#sh-ret-f'].forEach((s) => { const el = form.querySelector(s); if (el) el.disabled = o; });
+        const o = own(); const el = form.querySelector('#sh-ret-f'); if (el) el.disabled = o;
       }));
       function fill(d) {
         if (!d) return;
@@ -891,10 +894,9 @@
         if (type === 'shuttle') {
           form.querySelector('#sh-phone').value = d.phone || '';
           form.querySelectorAll('[name="pickup"]').forEach((r) => { r.checked = r.value === d.pickup; r.dispatchEvent(new Event('change')); });
-          out.textContent = d.count || 1;
           form.querySelectorAll('[name="ret"]').forEach((r) => { r.checked = r.value === d.ret; });
           const pk = d.pickup === 'Usafiri wangu' ? T('Usafiri wako mwenyewe', 'Your own transport') : d.pickup;
-          $('#sh-sum').textContent = d.pickup === 'Usafiri wangu' ? pk : `${pk} · ${d.count} ${T('watu', 'people')} · ${T('kurudi', 'return')}: ${d.ret === 'Ndiyo' ? T('ndiyo', 'yes') : T('hapana', 'no')}`;
+          $('#sh-sum').textContent = d.pickup === 'Usafiri wangu' ? pk : `${pk} · ${T('kurudi', 'return')}: ${d.ret === 'Ndiyo' ? T('ndiyo', 'yes') : T('hapana', 'no')}`;
         } else {
           msg.value = d.msg || ''; cnt.textContent = msg.value.length + ' / 300';
           $('#nt-sum').textContent = `“${d.msg}” — ${d.name}`;
@@ -920,8 +922,8 @@
         if (type === 'shuttle') {
           d.phone = (fd.get('phone') || '').trim(); d.pickup = fd.get('pickup');
           if (!d.pickup) return fail(T('Tafadhali chagua utapanda wapi.', 'Please choose where you will board.'));
-          if (!/^[+0-9 ]{9,16}$/.test(d.phone)) return fail(T('Tafadhali andika namba sahihi ya WhatsApp.', 'Please enter a valid WhatsApp number.'));
-          d.count = own() ? 0 : +out.textContent || 1; d.ret = own() ? '-' : fd.get('ret');
+          if (d.phone && !/^[+0-9 ]{9,16}$/.test(d.phone)) return fail(T('Tafadhali andika namba sahihi ya WhatsApp.', 'Please enter a valid WhatsApp number.'));
+          d.count = own() ? 0 : 1; d.ret = own() ? '-' : fd.get('ret');
         } else {
           d.msg = (fd.get('msg') || '').trim();
           if (d.msg.length < 2) return fail(T('Tafadhali andika ujumbe.', 'Please write a note.'));

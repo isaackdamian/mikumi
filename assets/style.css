@@ -145,7 +145,8 @@ main h2{margin:0;font-family:'Allura',cursive;font-weight:400;font-size:50px;lin
 .mk .dot{width:10px;height:10px;margin-top:8px;background:var(--ruby);border:2px solid #fff;transform:rotate(45deg);box-shadow:0 0 0 0 rgba(155,17,30,.55);animation:pulse 2.2s ease-out infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(155,17,30,.55)}70%{box-shadow:0 0 0 12px rgba(155,17,30,0)}100%{box-shadow:0 0 0 0 rgba(155,17,30,0)}}
 .mk.sign{transform:translate(-50%,-50%)}
-.mk .plq{background:rgba(245,242,238,.94);border:1px solid var(--ink);color:var(--ink);font-size:12px;font-weight:700;padding:3px 7px;white-space:nowrap}
+.mk .plq{display:inline-flex;align-items:center;gap:5px;background:rgba(245,242,238,.94);border:1px solid var(--ink);color:var(--ink);font-size:12px;font-weight:700;padding:3px 7px;white-space:nowrap}
+.mk .ar-i{width:12px;height:12px;flex:none}
 @media (prefers-reduced-motion:reduce){.mk .dot{animation:none}}
 
 /* timeline */
